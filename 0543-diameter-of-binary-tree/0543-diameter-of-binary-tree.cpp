@@ -12,19 +12,35 @@
 class Solution {
 public:
     
-    int height(TreeNode*root){
-        if(root == NULL)
-            return 0;
-      return 1+ max(height(root->left), height(root->right));
-    }
-    int diameterOfBinaryTree(TreeNode* root) {
-        if(root == NULL)
-            return 0;
-        int option1 = height(root->left)+ height(root->right);
-        int option2 = diameterOfBinaryTree(root->left);
-        int option3 = diameterOfBinaryTree(root->right);
+    pair<int,int>heightdiameter(TreeNode*root){
+        if(root == NULL){
+            pair<int,int>p;
+            p.first = 0;
+            p.second = 0;
+            return p;
+        }
+        pair<int,int>leftans = heightdiameter(root->left);
+        pair<int, int>rightans = heightdiameter(root->right);
         
-        return max(option1,max(option2,option3));
+        int lh = leftans.first;
+        int ld = leftans.second;
+        
+        int rh = rightans.first;
+        int rd = rightans.second;
+        
+        int height = 1+max(lh, rh);
+        int diameter = max(lh+rh, max(ld,rd));
+        pair<int,int>p;
+        p.first = height;
+        p.second = diameter;
+        return p;
+        
+    }
+    
+    
+    int diameterOfBinaryTree(TreeNode* root) {
+        pair<int, int>p = heightdiameter(root);
+        return p.second;
         
     }
 };
